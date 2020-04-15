@@ -49,14 +49,25 @@ async function main() {
  * Execute
  */
 
-(async () => {
-  for (let N = minN; N <= maxN; N++) {
-    console.log(`\n\n${new Array(50).map(() => "-").toString()}`);
-    console.log(`Computing N: ${N}`);
-    await produceRandomInputData({ N }, false, inputFilePath);
+/* to execute optimizations from minN to maxN */
+if (true)
+  (async () => {
+    for (let N = minN; N <= maxN; N++) {
+      console.log(`\n\n${new Array(50).map(() => "-").toString()}`);
+      console.log(`Computing N: ${N}`);
+      await produceRandomInputData({ N }, false, inputFilePath);
+      await main();
+    }
+  })().catch((error) => {
+    console.error(error);
+    console.log(`\nExiting safely.`);
+  });
+
+/* to execute optimizations for current data in file */
+if (false)
+  (async () => {
     await main();
-  }
-})().catch((error) => {
-  console.error(error);
-  console.log(`\nExiting safely.`);
-});
+  })().catch((error) => {
+    console.error(error);
+    console.log(`\nExiting safely.`);
+  });
