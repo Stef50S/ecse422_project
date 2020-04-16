@@ -13,7 +13,7 @@ import { Requirements } from "./types";
 const filepath = `./input.txt`; /* Path to input file */
 
 /* Uncomment this line to write to input file valid random data. */
-//(async () => await produceRandomInputData({ N: 4, print: false, filepath }))();
+//(async () => await produceRandomInputData({ N: 7, print: false, filepath }))();
 
 /***************************************************************************
  * Program
@@ -27,6 +27,7 @@ async function main(requirements: Requirements) {
 
   /* Compute a optimal graph provided data, constraints and goals */
   console.time("Execution Time");
+  console.info(`Computing N: ${input.N}`);
   const optimum = await maximizeReliability(input, requirements).catch(
     (error) => {
       console.error(error);
@@ -75,7 +76,6 @@ if (false)
   (async () => {
     for (let N = minN; N <= maxN; N++) {
       console.info(`\n\n${new Array(50).map(() => "-").toString()}`);
-      console.info(`Computing N: ${N}`);
       await produceRandomInputData({
         N,
         print: false,
