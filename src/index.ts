@@ -36,8 +36,22 @@ async function main(requirements: Requirements) {
     }
   );
 
-  /** Output */
+  /* Output */
   console.timeEnd("Execution Time");
+
+  /* Output - Failure */
+  if (optimum.reliability < 0) {
+    return console.info(`Optimization with cost constraint not achievable.`);
+  }
+  if (
+    !!requirements.reliabilityGoal &&
+    optimum.reliability < requirements.reliabilityGoal
+  ) {
+    console.info(`Optimization with reliability Goal not achievable.`);
+    console.info(`The Following is solution found.`);
+  }
+
+  /* Output Success */
   console.info(`Edges: ${optimum.edges.length}`);
   console.info(`Combinations: ${optimum.combinationCount}`);
   console.info(`Reliability of Network: ${optimum.reliability}`);

@@ -140,7 +140,7 @@ async function maximizeReliability(
 ): Promise<Output> {
   /* Optimom solution */
   let optimum: Output = {
-    reliability: 0,
+    reliability: -1,
     cost: 0,
     edges: [],
     combination: [],
