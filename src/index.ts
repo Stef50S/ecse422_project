@@ -50,7 +50,7 @@ async function main() {
  */
 
 /* to execute optimizations from minN to maxN */
-if (true)
+if (false)
   (async () => {
     for (let N = minN; N <= maxN; N++) {
       console.log(`\n\n${new Array(50).map(() => "-").toString()}`);
@@ -64,7 +64,7 @@ if (true)
   });
 
 /* to execute optimizations for current data in file */
-if (false)
+if (true)
   (async () => {
     await main();
   })().catch((error) => {
