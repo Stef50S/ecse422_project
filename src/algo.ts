@@ -7,7 +7,7 @@ import { Edge, InputData, Requirements, Output } from "./types";
  */
 function createEdges({ N, costs, reliabilities }: InputData): Edge[] {
   /* Create all possible edges */
-  const edges: Edge[] = [];
+  let edges: Edge[] = [];
   for (let nodeA = 0; nodeA < N; nodeA++) {
     for (let nodeB = nodeA + 1; nodeB < N; nodeB++) {
       edges.push({
@@ -20,7 +20,7 @@ function createEdges({ N, costs, reliabilities }: InputData): Edge[] {
   }
 
   /* Sort these edges according to reliability */
-  edges.sort((edgeA, edgeB) => {
+  edges = edges.sort((edgeA, edgeB) => {
     if (edgeA.reliability > edgeB.reliability) return -1;
     if (edgeB.reliability > edgeA.reliability) return 1;
     return 0;
@@ -38,9 +38,10 @@ function allEdgeCombinations(
   N: number,
   edges: Edge[]
 ): Generator<Edge[], void> {
-  /* Stop recursive calls if combination smaller than N */
+  /* Stop recursive calls if combination get smaller or greater than N-1*/
   let worthRecursiveCall = (active: Edge[], rest: Edge[]): boolean => {
     if (active.length + rest.length < N - 1) return false;
+    if (active.length > N - 1) return false;
     return true;
   };
 

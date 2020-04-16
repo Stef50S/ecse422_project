@@ -17,12 +17,14 @@ async function produceRandomInputData({
   print: boolean;
   filepath?: string;
 }) {
+  const str = (i: number) => `${(0.9 + i / 10000).toFixed(4)}`;
+
   /* Create input data */
   let costs = "1";
-  let reliabilities = "0.901";
+  let reliabilities = str(1);
   for (let i = 2; i <= (N * (N - 1)) / 2; i++) {
     costs = `${costs} ${i}`;
-    reliabilities = `${reliabilities} ${(0.9 + i / 10000).toFixed(4)}`;
+    reliabilities = `${reliabilities} ${str(i)}`;
   }
 
   /* Print to console */
