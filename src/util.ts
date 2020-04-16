@@ -220,31 +220,9 @@ function displayMatrix(N: number, edges: Edge[]) {
   }
 }
 
-/**
- * factorial of number
- * @param num
- */
-function factorial(num: number): number {
-  if (!num || num <= 0) return 1;
-  else return num * factorial(num - 1);
-}
-
-/**
- * Number of possible combinations of edges
- * @param numEdges
- */
-function combinationCount(numEdges: number): number {
-  let sum = 0;
-  for (let r = 1; r <= numEdges; r++)
-    sum += factorial(numEdges) / (factorial(r) * factorial(numEdges - r));
-
-  return sum;
-}
-
 export {
   produceRandomInputData,
   requestRequirement,
   readInputData,
   displayMatrix,
-  combinationCount,
 };

@@ -1,5 +1,4 @@
 import { Edge, InputData, Requirements, Output } from "./types";
-import { combinationCount } from "./util";
 
 /**
  * Create all possible edges between nodes and sorts them by decreasing
@@ -149,7 +148,7 @@ async function maximizeReliability(
 
   /* Create all possible edges between nodes */
   optimum.edges = createEdges(inputData);
-  optimum.combinationCount = combinationCount(optimum.edges.length);
+  optimum.combinationCount = Math.pow(2, optimum.edges.length);
 
   /* Create all viable edge combinations */
   const combinations = allEdgeCombinations(inputData.N, optimum.edges);

@@ -26,6 +26,7 @@ async function main(requirements: Requirements) {
   });
 
   /* Compute a optimal graph provided data, constraints and goals */
+  console.info(`\n\n${new Array(50).map(() => "-").toString()}`);
   console.time("Execution Time");
   console.info(`Computing N: ${input.N}`);
   const optimum = await maximizeReliability(input, requirements).catch(
@@ -39,10 +40,11 @@ async function main(requirements: Requirements) {
   console.timeEnd("Execution Time");
   console.info(`Edges: ${optimum.edges.length}`);
   console.info(`Combinations: ${optimum.combinationCount}`);
-  console.info(`Reliability: ${optimum.reliability}`);
-  console.info(`Cost: ${optimum.cost}`);
+  console.info(`Reliability of Network: ${optimum.reliability}`);
+  console.info(`Cost of Network: ${optimum.cost}`);
+  console.info(`Selected Edges: `);
   console.info(optimum.combination);
-  console.info(`Matrix: `);
+  console.info(`Node to Edges Matrix: `);
   displayMatrix(input.N, optimum.combination);
 }
 
@@ -75,7 +77,6 @@ const requirements = {
 if (false)
   (async () => {
     for (let N = minN; N <= maxN; N++) {
-      console.info(`\n\n${new Array(50).map(() => "-").toString()}`);
       await produceRandomInputData({
         N,
         print: false,
