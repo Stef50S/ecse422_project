@@ -1,4 +1,5 @@
 import fs from "fs";
+import readline from "readline";
 import { Edge, InputData } from "./types";
 
 /**
@@ -44,6 +45,50 @@ async function produceRandomInputData({
       );
     });
   }
+}
+
+/**
+ * Request user requirements.
+ * @param prompt
+ */
+async function requestRequirement(prompt: string): Promise<number> {
+  const requestPrompt = (prompt: string): Promise<string> => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    return new Promise((resolve) =>
+      rl.question(prompt, (ans) => {
+        rl.close();
+        resolve(ans);
+      })
+    );
+  };
+
+  const requestValue = async (): Promise<number> => {
+    const ans = await requestPrompt(`Value of requirment: `);
+    if (isNaN(ans as any)) {
+      console.info(`Value provided not a number.`);
+      return requestValue();
+    }
+    const value = Number(ans);
+    if (value <= 0) {
+      console.info(`Value must be positive.`);
+      return requestValue();
+    }
+
+    return value;
+  };
+
+  const ans = await requestPrompt(prompt);
+  if (ans !== "y" && ans !== "n") {
+    console.info(`Answer must by 'y' or 'n'.`);
+    return requestRequirement(prompt);
+  }
+  if (ans === "n") return 0;
+
+  return requestValue();
 }
 
 /**
@@ -198,6 +243,7 @@ function combinationCount(numEdges: number): number {
 
 export {
   produceRandomInputData,
+  requestRequirement,
   readInputData,
   displayMatrix,
   combinationCount,
