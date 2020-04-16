@@ -7,11 +7,15 @@ import { Edge, InputData } from "./types";
  * @param print
  * @param filepath
  */
-async function produceRandomInputData(
-  { N }: { N: number },
-  print: boolean,
-  filepath?: string
-) {
+async function produceRandomInputData({
+  N,
+  print,
+  filepath,
+}: {
+  N: number;
+  print: boolean;
+  filepath?: string;
+}) {
   /* Create input data */
   let costs = "1";
   let reliabilities = "0.901";
@@ -22,9 +26,9 @@ async function produceRandomInputData(
 
   /* Print to console */
   if (print) {
-    console.log(N);
-    console.log(costs);
-    console.log(reliabilities);
+    console.info(N);
+    console.info(costs);
+    console.info(reliabilities);
   }
 
   /* Write to file */
@@ -158,8 +162,8 @@ function displayMatrix(N: number, edges: Edge[]) {
     line = `${line} ${x}`;
     line2 = `${line2} -`;
   }
-  console.log(line);
-  console.log(line2);
+  console.info(line);
+  console.info(line2);
 
   for (let y = 0; y < N; y++) {
     line = `${y}|`;
@@ -167,8 +171,34 @@ function displayMatrix(N: number, edges: Edge[]) {
       if (!!xyMap[`${x} ${y}`]) line = `${line} X`;
       else line = `${line} o`;
     }
-    console.log(line);
+    console.info(line);
   }
 }
 
-export { produceRandomInputData, readInputData, displayMatrix };
+/**
+ * factorial of number
+ * @param num
+ */
+function factorial(num: number): number {
+  if (!num || num <= 0) return 1;
+  else return num * factorial(num - 1);
+}
+
+/**
+ * Number of possible combinations of edges
+ * @param numEdges
+ */
+function combinationCount(numEdges: number): number {
+  let sum = 0;
+  for (let r = 1; r <= numEdges; r++)
+    sum += factorial(numEdges) / (factorial(r) * factorial(numEdges - r));
+
+  return sum;
+}
+
+export {
+  produceRandomInputData,
+  readInputData,
+  displayMatrix,
+  combinationCount,
+};

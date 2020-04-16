@@ -12,6 +12,7 @@ type Requirements = {
 type Output = {
   readonly reliability: number;
   readonly cost: number;
+  edges: Edge[];
   readonly combination: Edge[];
   combinationCount: number;
 };

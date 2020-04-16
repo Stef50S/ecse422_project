@@ -4,23 +4,23 @@ import { readInputData, produceRandomInputData, displayMatrix } from "./util";
 /***************************************************************************
  * Config
  */
-const inputFilePath = `./input.txt`; /* Path to input file */
-const minN = 2; /* the program will compute optimization starting at this N */
-const maxN = 8; /* the program will stop optimizing at this N */
+const filepath = `./input.txt`; /* Path to input file */
+const minN = 3; /* the program will compute optimization starting at this N */
+const maxN = 7; /* the program will stop optimizing at this N */
 const requirements = {
-  reliabilityGoal: 0.4 /* set to 0 to ignore reliability constraint */,
+  reliabilityGoal: 0 /* set to 0 to ignore reliability constraint */,
   costConstraint: 0 /* set to 0 to ignore cost constraint */,
 };
 
 /* Uncomment this line to write to input file valid random data. */
-//(async () => await produceRandomInputData({ N: 7 }, true))();
+//(async () => await produceRandomInputData({ N: 4, print: false, filepath }))();
 
 /***************************************************************************
  * Program
  */
 async function main() {
   /* Read input file data */
-  const input = await readInputData(inputFilePath).catch((error) => {
+  const input = await readInputData(filepath).catch((error) => {
     console.error(error);
     throw new Error(`Error: reading in the input data.`);
   });
@@ -36,12 +36,12 @@ async function main() {
 
   /** Output */
   console.timeEnd("Execution Time");
-  console.log(`Combinations: ${optimum.combinationCount}`);
-  console.log(`Reliability: ${optimum.reliability}`);
-  console.log(`Cost: ${optimum.cost}`);
-  console.log(`Edges: `);
-  console.log(optimum.combination);
-  console.log(`Matrix: `);
+  console.info(`Edges: ${optimum.edges.length}`);
+  console.info(`Combinations: ${optimum.combinationCount}`);
+  console.info(`Reliability: ${optimum.reliability}`);
+  console.info(`Cost: ${optimum.cost}`);
+  console.info(optimum.combination);
+  console.info(`Matrix: `);
   displayMatrix(input.N, optimum.combination);
 }
 
@@ -50,24 +50,28 @@ async function main() {
  */
 
 /* to execute optimizations from minN to maxN */
-if (false)
+if (true)
   (async () => {
     for (let N = minN; N <= maxN; N++) {
-      console.log(`\n\n${new Array(50).map(() => "-").toString()}`);
-      console.log(`Computing N: ${N}`);
-      await produceRandomInputData({ N }, false, inputFilePath);
+      console.info(`\n\n${new Array(50).map(() => "-").toString()}`);
+      console.info(`Computing N: ${N}`);
+      await produceRandomInputData({
+        N,
+        print: false,
+        filepath: filepath,
+      });
       await main();
     }
   })().catch((error) => {
     console.error(error);
-    console.log(`\nExiting safely.`);
+    console.info(`\nExiting safely.`);
   });
 
 /* to execute optimizations for current data in file */
-if (true)
+if (false)
   (async () => {
     await main();
   })().catch((error) => {
     console.error(error);
-    console.log(`\nExiting safely.`);
+    console.info(`\nExiting safely.`);
   });

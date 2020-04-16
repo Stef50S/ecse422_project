@@ -1,4 +1,5 @@
 import { Edge, InputData, Requirements, Output } from "./types";
+import { combinationCount } from "./util";
 
 /**
  * Create all possible edges between nodes and sorts them by decreasing
@@ -34,23 +35,35 @@ function createEdges({ N, costs, reliabilities }: InputData): Edge[] {
  * compute the next combination when requested.
  * @param edges
  */
-function allEdgeCombinations(edges: Edge[]): Generator<Edge[], void> {
+function allEdgeCombinations(
+  N: number,
+  edges: Edge[]
+): Generator<Edge[], void> {
+  /* Stop recursive calls if combination smaller than N */
+  let worthRecursiveCall = (active: Edge[], rest: Edge[]): boolean => {
+    if (active.length + rest.length < N - 1) return false;
+    return true;
+  };
+
+  /* Recursive function */
   let fn = function* (active: Edge[], rest: Edge[]): Generator<Edge[], void> {
     if (rest.length === 0) {
       yield active;
     } else {
       /* first recursive side */
-      const activeS1 = [...active];
+      const actS1 = [...active];
       const restS1 = [...rest.slice(1)];
-      activeS1.push(rest[0]);
-      if (activeS1.length !== 0 || restS1.length !== 0)
-        yield* fn(activeS1, restS1);
+
+      if (actS1.length !== 0 || restS1.length !== 0)
+        if (worthRecursiveCall(actS1, restS1)) yield* fn(actS1, restS1);
 
       /* second recursive side */
-      const activeS2 = [...active];
+      const actS2 = [...active];
       const restS2 = [...rest.slice(1)];
-      if (activeS2.length !== 0 || restS2.length !== 0)
-        yield* fn(activeS2, restS2);
+      actS2.push(rest[0]);
+
+      if (actS2.length !== 0 || restS2.length !== 0)
+        if (worthRecursiveCall(actS2, restS2)) yield* fn(actS2, restS2);
     }
   };
 
@@ -125,23 +138,24 @@ async function maximizeReliability(
   inputData: InputData,
   { reliabilityGoal, costConstraint }: Requirements
 ): Promise<Output> {
-  /* Create all possible edges between nodes */
-  const edges = createEdges(inputData);
-
-  /* Create all viable edge combinations */
-  const combinations = allEdgeCombinations(edges);
-
-  /* Find optimum combination meeting constraints */
+  /* Optimom solution */
   let optimum: Output = {
     reliability: 0,
     cost: 0,
+    edges: [],
     combination: [],
     combinationCount: 0,
   };
 
-  for (const combination of combinations) {
-    optimum.combinationCount++;
+  /* Create all possible edges between nodes */
+  optimum.edges = createEdges(inputData);
+  optimum.combinationCount = combinationCount(optimum.edges.length);
 
+  /* Create all viable edge combinations */
+  const combinations = allEdgeCombinations(inputData.N, optimum.edges);
+
+  /* Find optimum combination meeting constraints */
+  for (const combination of combinations) {
     /* Check if valid combination */
     if (!isValidCombination(inputData.N, combination)) continue;
 
