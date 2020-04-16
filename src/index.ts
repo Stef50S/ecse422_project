@@ -25,10 +25,15 @@ async function main(requirements: Requirements) {
     throw new Error(`Error: reading in the input data.`);
   });
 
-  /* Compute a optimal graph provided data, constraints and goals */
-  console.info(`\n\n${new Array(50).map(() => "-").toString()}`);
+  /* Output - start */
+  const seperator = `*****************************************`;
+  console.log(`\n${seperator}${seperator}`);
   console.time("Execution Time");
   console.info(`Computing N: ${input.N}`);
+  console.info(`Reliability Goal: ${requirements.reliabilityGoal}`);
+  console.info(`Cost Constraint: ${requirements.costConstraint}`);
+
+  /* Compute a optimal graph provided data, constraints and goals */
   const optimum = await maximizeReliability(input, requirements).catch(
     (error) => {
       console.error(error);
@@ -37,23 +42,27 @@ async function main(requirements: Requirements) {
   );
 
   /* Output */
+  console.info(`Edges: ${optimum.edges.length}`);
+  console.info(`Combinations: ${optimum.combinationCount}`);
   console.timeEnd("Execution Time");
 
   /* Output - Failure */
   if (optimum.reliability < 0) {
-    return console.info(`Optimization with cost constraint not achievable.`);
+    console.log(`---------------- Error ----------------`);
+    console.info(`Optimization with cost constraint not achievable.`);
+    return;
   }
   if (
     !!requirements.reliabilityGoal &&
     optimum.reliability < requirements.reliabilityGoal
   ) {
-    console.info(`Optimization with reliability Goal not achievable.`);
-    console.info(`The Following is solution found.`);
+    console.log(`---------------- Error ----------------`);
+    console.info(`Optimization with reliability goal not achievable.`);
+    console.info(`The following is approx. optimal solution found.`);
   }
 
   /* Output Success */
-  console.info(`Edges: ${optimum.edges.length}`);
-  console.info(`Combinations: ${optimum.combinationCount}`);
+  console.log(`---------------- Solution ----------------`);
   console.info(`Reliability of Network: ${optimum.reliability}`);
   console.info(`Cost of Network: ${optimum.cost}`);
   console.info(`Selected Edges: `);
@@ -67,7 +76,7 @@ async function main(requirements: Requirements) {
  */
 
 /* to execute optimizations for current data in file and with user prompt */
-if (true)
+if (false)
   (async () => {
     await main({
       reliabilityGoal: await requestRequirement(
@@ -88,7 +97,7 @@ const requirements = {
   costConstraint: 0 /* set to 0 to ignore cost constraint */,
 };
 
-if (false)
+if (true)
   (async () => {
     for (let N = minN; N <= maxN; N++) {
       await produceRandomInputData({
