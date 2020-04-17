@@ -80,7 +80,7 @@ if (false)
   (async () => {
     await main({
       reliabilityGoal: await requestRequirement(
-        `Set minimum realiability goal? (y/n): `
+        `Set minimum reliability goal? (y/n): `
       ),
       costConstraint: await requestRequirement(`Set cost constraint? (y/n): `),
     });
