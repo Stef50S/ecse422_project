@@ -69,7 +69,7 @@ async function requestRequirement(prompt: string): Promise<number> {
   };
 
   const requestValue = async (): Promise<number> => {
-    const ans = await requestPrompt(`Value of requirment: `);
+    const ans = await requestPrompt(`Value of requirement: `);
     if (isNaN(ans as any)) {
       console.info(`Value provided not a number.`);
       return requestValue();
