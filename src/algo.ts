@@ -2,7 +2,7 @@ import { Edge, InputData, Requirements, Output } from "./types";
 
 /**
  * Create all possible edges between nodes and sorts them by decreasing
- * realiabilities.
+ * reliabilities.
  * @param inputData
  */
 function createEdges({ N, costs, reliabilities }: InputData): Edge[] {
@@ -138,7 +138,7 @@ async function maximizeReliability(
   inputData: InputData,
   { reliabilityGoal, costConstraint }: Requirements
 ): Promise<Output> {
-  /* Optimom solution */
+  /* Optimum solution */
   let optimum: Output = {
     reliability: -1,
     cost: 0,
